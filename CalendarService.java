@@ -28,7 +28,7 @@ public class CalendarService {
 		}
     }
 
-    // Verifica se há disponibilidade no horário desejado
+    // Checks if there is availability at the desired time
     public boolean estaDisponivel(String medico, LocalDateTime inicio, int duracaoMin) throws IOException {
         LocalDateTime fim = inicio.plusMinutes(duracaoMin);
 
@@ -52,7 +52,7 @@ public class CalendarService {
         return true;
     }
 
-    // Cria um evento no Google Calendar
+    // Creates an event in Google Calendar
     public void criarEvento(String medico, LocalDateTime inicio, int duracaoMin) throws IOException {
         LocalDateTime fim = inicio.plusMinutes(duracaoMin);
 
@@ -69,3 +69,4 @@ public class CalendarService {
         calendar.events().insert("primary", event).execute();
     }
 }
+
