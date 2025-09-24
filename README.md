@@ -1,2 +1,3 @@
-Projeto Maven feito com SpringBoot, utilizando a linguagem java. Somente adicionei o WebhookController e o CalendarService pois este projeto ainda está em desenvolvimento,
-e ainda pretendo fazer do projeto um negócio. Então por questões de sigilo adicionei somente estas duas partes do projeto.
+This is a Maven project developed with Spring Boot, using the Java programming language.
+At this stage, I have only included the WebhookController and the CalendarService, as the project is still under development.
+Since I intend to evolve this project into a business solution, only these two components have been made available for confidentiality reasons.
