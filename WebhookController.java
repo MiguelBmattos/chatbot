@@ -21,7 +21,7 @@ public class WebhookController {
     private final MessagesDao messagesDao = new MessagesDao(DB.getConnection());
     private final QueueProcessor queueProcessor;
 
-    // Injete a QueueProcessor via construtor (Spring cuida da criação)
+    // Inject the QueueProcessor via constructor (Spring handles the instantiation)
     public WebhookController(QueueProcessor queueProcessor) {
         this.queueProcessor = queueProcessor;
     }
@@ -34,18 +34,19 @@ public class WebhookController {
 
         String from = fromRaw.replaceAll("^whatsapp:", "").trim();
 
-        // Cria objeto message do tipo USUARIO
+        // Creates a message object of type USER
         Messages msgUsuario = new Messages(null, from, body, Tipo.USUARIO, LocalDateTime.now());
 
-        // Salva a mensagem do usuário no banco
+        // Saves the user's message in the database
         messagesDao.insert(msgUsuario);
         
       
-        // Enfileira para processamento assíncrono
+        // Enqueues for asynchronous processing
         queueProcessor.adicionarMensagem(msgUsuario);
 
         
-     // Se a fila estava vazia → não manda resposta, deixa a IA responder
+     // If the queue was empty → do not send a response, let the AI handle it
      return ResponseEntity.ok().contentType(MediaType.APPLICATION_XML).body("");
     }
 }
+
