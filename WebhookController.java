@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import model.entities.Messages;
-import model.enums.Tipo;
-import model.dao.MessagesDao;
+import application.model.entities.Messages;
+import application.model.enums.Tipo;
+import application.model.dao.MessagesDao;
 
-import db.DB;
-import queue.QueueProcessor;
+import application.db.DB;
+import application.queue.QueueProcessor;
 
 @RestController
 public class WebhookController {
@@ -21,7 +21,7 @@ public class WebhookController {
     private final MessagesDao messagesDao = new MessagesDao(DB.getConnection());
     private final QueueProcessor queueProcessor;
 
-    // Inject the QueueProcessor via constructor (Spring handles the instantiation)
+    // Injeta a QueueProcessor via construtor (Spring cuida da criação)
     public WebhookController(QueueProcessor queueProcessor) {
         this.queueProcessor = queueProcessor;
     }
@@ -34,19 +34,18 @@ public class WebhookController {
 
         String from = fromRaw.replaceAll("^whatsapp:", "").trim();
 
-        // Creates a message object of type USER
+        // Cria objeto message do tipo USUARIO
         Messages msgUsuario = new Messages(null, from, body, Tipo.USUARIO, LocalDateTime.now());
 
-        // Saves the user's message in the database
+        // Salva a mensagem do usuário no banco
         messagesDao.insert(msgUsuario);
         
       
-        // Enqueues for asynchronous processing
+        // Enfileira para processamento assíncrono
         queueProcessor.adicionarMensagem(msgUsuario);
 
         
-     // If the queue was empty → do not send a response, let the AI handle it
+     // Se a fila estava vazia → não manda resposta, deixa a IA responder
      return ResponseEntity.ok().contentType(MediaType.APPLICATION_XML).body("");
     }
 }
-
